@@ -1,0 +1,89 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,innitial-scale=1">
+		<title>BOS管理系统 登陆页面</title>
+		<script src="./js/jquery-1.8.3.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/login.css">
+	</head>
+
+	<body>
+		<div class="loginbox">
+			<div class="loginnav">
+				<nav class="navbar navbar-default">
+					<div class="container">
+						<div class="navbar-header">
+							<a class="navbar-brand" href="#"><img src="images/logo.png"></a>
+							<span class="logintitle">员工登录</span>
+						</div>
+					</div>
+				</nav>
+			</div>
+
+			<section class="mainlogin">
+				<div class="container">
+					<div class="col-md-4 col-md-offset-8 logincontent">
+						<h4>员工登录</h4>
+						<form class="form-horizontal" id="loginform" name="loginform" method="post" target="_parent" action="./user_login.action">
+							<div class="form-group" id="idInputLine">
+								<label for="inputPassword3" class="col-sm-3 control-label">账号</label>
+								<div class="col-sm-8">
+									<input id="loginform:idInput" type="text" name="username" class="form-control" value="admin" placeholder="请输入手机号/邮箱/用户名">
+								</div>
+							</div>
+							<div class="form-group" id="pwdInputLine">
+								<label id="loginform:pwdInput" class="col-sm-3 control-label">密码</label>
+								<div class="col-sm-8">
+									<input for="pwdInput" type="text" class="form-control" name="password" value="123" id="inputaccount" placeholder="请输入您的密码">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputvalidate" class="col-sm-3 control-label">验证码</label>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="inputaccount" placeholder="请输入验证码">
+								</div>
+								<div class="col-sm-4">
+									<img id="loginform:vCode" src="validatecode.jsp" onclick="javascript:document.getElementById('loginform:vCode'). src='validatecode.jsp?'+Math.random();" />
+								</div>
+							</div>
+							<div class="form-group">
+
+								<div class="col-sm-offset-3 col-sm-4">
+									<input type="checkbox"><span class="size12">　记住用户名</span>
+								</div>
+								<div class="col-sm-4">
+									<a href="#"><span class="size12 forget">忘记密码</span></a>
+								</div>
+							</div>
+							<div class="col-md-offset-3 col-md-8">
+								<a href="javascript:$('#loginform').submit();" id="loginform:j_id19" name="loginform:j_id19" class="btn btn-danger">立即登录</a>
+
+							</div>
+						</form>
+					</div>
+				</div>
+			</section>
+
+			<footer class="clearfix">
+				<div class="container">
+					<p class="text-center">地址：北京市昌平区建材城西路金燕龙办公楼一层 邮编：100096 电话：400-618-4000 传真：010-82935100 </p>
+					<p class="text-center">京ICP备08001421号京公网安备110108007702</p>
+				</div>
+			</footer>
+		</div>
+	</body>
+
+</html>
+<script type="text/javascript">
+	document.onkeyup = function(e) { //按键信息对象以函数参数的形式传递进来了，就是那个e  
+		var code = e.charCode || e.keyCode; //取出按键信息中的按键代码(大部分浏览器通过keyCode属性获取按键代码，但少部分浏览器使用的却是charCode)  
+		if(code == 13) {
+			$('#loginform').submit();
+		}
+	}
+</script>

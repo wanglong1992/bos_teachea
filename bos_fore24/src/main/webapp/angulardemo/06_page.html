@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<script type="text/javascript" src="../js/angular.min.js"></script>
+<script type="text/javascript" src="../js/angular-route.min.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/bootstrap.js"></script>
+<link rel="stylesheet" href="../css/bootstrap/bootstrap.css" />
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body ng-app="paginationApp" ng-controller="paginationCtrl">
+		<table class="table table-bordered table-hover">
+			<tr>
+				<th>序号</th>
+				<th>商品编号</th>
+				<th>名称</th>
+				<th>价格</th>
+			</tr>
+			<tr ng-repeat="product in products">
+				<td>{{$index+1}}</td>
+				<td>{{product.id}}</td>
+				<td>{{product.name}}</td>
+				<td>{{product.price}}</td>
+			</tr>
+		</table>
+		<div>
+			<ul class="pagination pull-right">
+				<li>
+					<a href ng-click="prev()">上一页</a>
+				</li>
+				<li ng-repeat="page in pageList" ng-class="{active: isActivePage(page)}">
+					<a ng-click="selectPage(page)">{{page}}</a>
+				</li>
+				<li>
+					<a href ng-click="next()">下一页</a>
+				</li>
+			</ul>
+		</div>
+	</body>
+
+</html>
+<script>
+	var app = angular.module("paginationApp",[]);
+	app.controller("paginationCtrl",["$scope","$http",function($scope,$http){
+		// 当前页
+		$scope.currentPage = 1;
+		// 每页显示的记录数
+		$scope.pageSize = 2;
+		// 总记录数
+		$scope.totalCount = 0;
+		// 总页数
+		$scope.totalPages = 0;
+		// 上一页
+		$scope.prev = function() {
+			if($scope.currentPage > 1) {
+				$scope.selectPage($scope.currentPage - 1);
+			}
+		}
+		// 下一页
+		$scope.next = function() {
+			if($scope.currentPage < $scope.totalPages) {
+				$scope.selectPage($scope.currentPage + 1);
+			}
+		}
+		// 当前页
+		$scope.selectPage = function(page) {
+			// 如果页码超出范围
+			if($scope.totalPages != 0) {
+				if(page < 1 || page > $scope.totalPages) return;
+			}
+	
+			$http({
+				method: 'GET',
+				url: '06_' + page + '.json',
+				params: {
+					// "page": page,
+					// "pageSize": $scope.pageSize
+				}
+			}).success(function(data, status, headers, config) {
+				// 显示表格数据 
+				$scope.products = data.products;
+				// 计算总页数
+				$scope.totalCount = data.totalCount;
+				// 计算总页数 math.ceil(x)返回大于参数x的最小整数,即对浮点数向上取整.
+				$scope.totalPages = Math.ceil($scope.totalCount / $scope.pageSize);
+	
+				// 当前显示页，设为当前页
+				$scope.currentPage = page;
+	
+				// 固定显示10页 (前5后4)
+				var begin;
+				var end;
+	
+				begin = page - 5;
+				if(begin < 0) {
+					begin = 1;
+				}
+	
+				end = begin + 9;
+				if(end > $scope.totalPages) {
+					end = $scope.totalPages;
+				}
+	
+				begin = end - 9;
+				if(begin < 1) {
+					begin = 1;
+				}
+	
+				$scope.pageList = new Array();
+				for(var i = begin; i <= end; i++) {
+					$scope.pageList.push(i);
+				}
+				
+			}).error(function(data, status, headers, config) {
+				// 当响应以错误状态返回时调用
+				alert("出错，请联系管理员 ");
+			});
+		}
+	
+		$scope.isActivePage = function(page) {
+			return page == $scope.currentPage;
+		}
+	
+		// 发起请求 显示第一页数据 （初始化）
+		$scope.selectPage($scope.currentPage);
+	}])
+</script>

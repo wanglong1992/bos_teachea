@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" href="../js/easyui/themes/default/easyui.css" />
+<link rel="stylesheet" href="../js/easyui/themes/icon.css" />
+<!--添加ztree-->
+<script type="text/javascript" src="../js/ztree/jquery.ztree.all-3.5.js"></script>
+<link rel="stylesheet" href="../js/ztree/zTreeStyle.css" />
+
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script>
+		$(function() {
+			// 存放当前行的索引（从0开始）
+			var currentRowIndex = undefined;
+			$('#grid').datagrid({    
+			    url:'product.json',    
+			    fitColumns:true,
+			    singleSelect:true,// 单选，只能选择一个
+			    iconCls : 'icon-forward',
+				fit : true,
+				border : false,
+				rownumbers : true,
+				striped : true,
+				pageList: [30,50,100],
+				pagination : true,
+				toolbar: [{
+					id:"add",
+					text:"新增",
+					iconCls: 'icon-add',
+					handler: function(){
+						if(currentRowIndex!=undefined){
+							return;
+						}
+						// alert('新增按钮')
+						// 在第一行的位置插入一个新行
+						$('#grid').datagrid('insertRow',{
+							index: 0,	// 索引从0开始
+							row: {}
+						});
+						// 开启编辑
+						$("#grid").datagrid("beginEdit",0);
+						// 将当前行赋值给变量
+						currentRowIndex = 0;
+					}
+				},'-',{
+					id:"edit",
+					text:"编辑",
+					iconCls: 'icon-edit',
+					handler: function(){
+						// alert('编辑按钮')
+						if(currentRowIndex!=undefined){
+							return;
+						}
+						// 获取datagrid选中的记录
+						var row = $("#grid").datagrid("getSelected");
+						var index = $("#grid").datagrid("getRowIndex",row);
+						// 开启编辑
+						$("#grid").datagrid("beginEdit",index);
+						// 将当前行赋值给变量
+						currentRowIndex = index;
+					}
+				},'-',{
+					id:"save",
+					text:"保存",
+					iconCls: 'icon-save',
+					handler: function(){
+						// alert('保存按钮')
+						// 结束编辑
+						$("#grid").datagrid("endEdit",currentRowIndex);
+					}
+				},'-',{
+					id:"cancel",
+					text:"取消",
+					iconCls: 'icon-cancel',
+					handler: function(){
+						// alert('取消按钮')
+						// 取消编辑
+						$("#grid").datagrid("cancelEdit",currentRowIndex);
+					}
+				}],
+			    columns:[[    
+			        {
+			        	field:'id',
+			        	title:'编号',
+			        	width:100,
+			        	editor:{
+			        		type:"validatebox",
+			        		options:{
+			        			required:true
+			        		}
+			        	}
+			        },
+			        {
+			        	field:'name',
+			        	title:'商品名称',
+			        	width:100,
+			        	editor:{
+			        		type:"validatebox",
+			        		options:{
+			        			required:true
+			        		}
+			        	}
+			        },
+			        {
+			        	field:'price',
+			        	title:'商品价格',
+			        	width:100,
+			        	align:'right',
+			        	editor:{
+			        		type:"validatebox",
+			        		options:{
+			        			required:true
+			        		}
+			        	}
+			        }
+			    ]],
+			    // 在保存之后触发
+			    /**
+			     * 
+					rowIndex：编辑行的索引，索引从0开始。
+					rowData：对应于完成编辑的行的记录。
+					changes：更改后的字段(键)/值对。			     
+			     */
+			    onAfterEdit:function(rowIndex, rowData, changes){
+			    	// alert(rowIndex+"    "+rowData);
+			    	console.log(rowData)
+			    	// 使用ajax，传递rowData，执行保存。
+			    	currentRowIndex = undefined;
+			    },
+			    // 在取消之后触发
+			    onCancelEdit:function(rowIndex, rowData){
+			    	currentRowIndex = undefined;
+			    }
+			});  
+		})
+	</script>
+
+	<body>
+		<table id="grid"></table> 
+
+	</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<script type="text/javascript" src="../js/angular.min.js" ></script>
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body ng-app="myapp" ng-controller="mycontroller">
+		<table border="1" width="100%">
+			<tr>
+				<td>序号</td>
+				<td>编号</td>
+				<td>商品名称</td>
+				<td>商品价格</td>
+			</tr>
+			<tr ng-repeat="product in products">
+				<td>{{$index+1}}</td>
+				<td>{{product.id}}</td>
+				<td>{{product.name}}</td>
+				<td>{{product.price}}</td>
+			</tr>
+		</table>
+	</body>
+</html>
+
+<script>
+	// 初始化模块
+	var myapp = angular.module("myapp",[]);
+
+	// 定义控制器，依赖注入$scope（行内式注入）
+	myapp.controller("mycontroller",['$scope',function($scope){
+		$scope.products = [{
+			id:1,
+			name:"手机",
+			price:2000
+		},{
+			id:2,
+			name:"电视",
+			price:5000
+		}]
+	}])
+	
+</script>

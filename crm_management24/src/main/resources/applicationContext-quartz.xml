@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd ">
+
+
+	<!-- 第一步：创建JobDetailFactoryBean ，指定实现Job接口的任务类 -->
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="cn.itcast.crm.job.BosJob" />
+	</bean>
+	<bean id="jobDetail2"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="cn.itcast.crm.job.BosJob2" />
+	</bean>
+	<!-- 第二步：定义触发器 -->
+	<bean id="cronTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<!-- 每天凌晨0点刷新 -->
+		<property name="cronExpression" value="0 0 0 * * ?"></property>
+	</bean>
+	<!-- 第二步：定义发送祝贺短信触发器 -->
+	<bean id="cronTrigger2"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail2" />
+		<!-- 每天凌晨0点刷新 -->
+		<property name="cronExpression" value="0 0 8 * * ?"></property>
+	</bean>	
+
+	<!-- 第三步：执行触发器 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobFactory" ref="jobFactory"></property>
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger" />
+				<ref bean="cronTrigger2" />
+			</list>
+		</property>
+	</bean>
+</beans>

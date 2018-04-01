@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<script type="text/javascript" src="../js/angular.min.js" ></script>
+<script type="text/javascript" src="../js/angular-route.min.js" ></script>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body ng-app="myapp">
+		<h2>公司标题</h2>
+		<ul>
+            <li><a href="#/">首页</a></li>
+            <li><a href="#/product">商品管理</a></li>
+            <li><a href="#/user">用户管理</a></li>
+            <li><a href="#/blabla">其他</a></li>
+        </ul>
+        <!--将单个视图在ng-view中显示-->
+        <div ng-view></div>
+		<h3>公司版本信息</h3>
+	</body>
+</html>
+
+<script>
+	// 初始化模块
+	var myapp = angular.module("myapp",['ngRoute']);
+	myapp.config(['$routeProvider', function($routeProvider){
+                $routeProvider
+                .when('/',{templateUrl:'./05.routeHome.html'})
+                .when('/product',{templateUrl:'./05.routeProduct.html'})
+                .when('/user',{templateUrl:'./05.routeUser.html'})
+                .otherwise({redirectTo:'/'});
+            }])
+
+	
+</script>

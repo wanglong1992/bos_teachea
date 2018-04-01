@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<script type="text/javascript" src="../js/angular.min.js" ></script>
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body ng-app="myapp" ng-controller="mycontroller">
+		<input type="text" name="username" ng-model="name" /><br>
+		{{name}}<br>
+		<div ng-bind="name"></div>
+	</body>
+</html>
+
+<script>
+	// 初始化模块
+	var myapp = angular.module("myapp",[]);
+//	// 定义控制器，依赖注入$scope（推断式注入）
+//	myapp.controller("mycontroller",function($scope){
+//		// 赋值
+//		$scope.name = "传智播客";
+//	})
+
+	// 定义控制器，依赖注入$scope（行内式注入）
+	myapp.controller("mycontroller",['$scope',function($scope){
+		$scope.name = "传智播客";
+	}])
+	
+</script>
